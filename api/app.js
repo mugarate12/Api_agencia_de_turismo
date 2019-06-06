@@ -4,6 +4,7 @@ const GraphQL_HTTP = require('express-graphql');
 
 // meus imports
 const schema = require('./graphql/schema');
+const db = require('../models/index');
 
 // criar instancia do server
 let app = express();
@@ -16,6 +17,9 @@ app.use('/graphql',
   // coloco meus middlewares aqui
   (req, res, next) => {
 
+    req['context'] = {};
+    req['context'].db = db;
+
     next();
 
   },
@@ -25,8 +29,8 @@ app.use('/graphql',
 
     schema,
     // melhorar isso
-    graphiql: true,
-    // context
+    graphiql: parseInt(process.env.NODE_ENV) === 1,
+    context: req.context
 
   }))
 

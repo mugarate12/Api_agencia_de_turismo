@@ -4,7 +4,10 @@ const userTypes = `
   type User {
 
     id: ID!,
-    username: String!
+    username: String!,
+    email: String!,
+    createdAt: String!,
+    updatedAt: String!
 
   }
 
