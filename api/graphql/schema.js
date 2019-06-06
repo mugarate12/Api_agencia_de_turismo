@@ -34,5 +34,5 @@ module.exports = makeExecutableSchema({
     Mutation,
     ...Types
   ],
-  // resolvers
+  resolvers
 });

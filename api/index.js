@@ -16,11 +16,11 @@ const {
 let server = http.createServer(app);
 const port = normalizePort(process.env.PORT || 3000);
 
-
+// sincronização com o banco
 db.sequelize.sync()
   .then(() => {
 
-    // depois aqui terá que sincronizar com o banco
+    // subindo o servidor
     server.listen(port);
     server.on('error', onError(server));
     server.on('listening', onListening(server));

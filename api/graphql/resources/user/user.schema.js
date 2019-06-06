@@ -11,19 +11,27 @@ const userTypes = `
 
   }
 
+  input createUserInput {
+
+    username: String!,
+    email: String!,
+    password: String!
+
+  }
+
 `;
 
 // definição das queries
 const userQueries = `
 
-  currentUser: User
+  currentUser(id: Int!): User
 
 `;
 
 // definição das mutations
 const userMutations = `
 
-  createUser(username: String!): User!
+  createUser(input: createUserInput!): User
 
 `;
 

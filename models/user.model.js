@@ -10,11 +10,12 @@ module.exports = (sequelize, DataTypes) => {
     // definição dos campos
     id: { type: DataTypes.INTEGER, allowNull: false, primaryKey: true, autoIncrement: true },
     password: { type: DataTypes.STRING, allowNull: false, validate: { notEmpty: true } },
-    email: { type: DataTypes.STRING, allowNull: false, validate: { isEmail: true }},
+    email: { type: DataTypes.STRING, allowNull: false, unique: true, validate: { isEmail: true }},
     username: { type: DataTypes.STRING, allowNull: false }
 
   }, {
-    sequelize
+    sequelize,
+    modelName: 'user'
   });
 
   return User;
