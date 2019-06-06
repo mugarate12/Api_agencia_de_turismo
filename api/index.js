@@ -17,7 +17,7 @@ let server = http.createServer(app);
 const port = normalizePort(process.env.PORT || 3000);
 
 // sincronização com o banco
-db.sequelize.sync()
+db.sequelize.sync({force: true})
   .then(() => {
 
     // subindo o servidor

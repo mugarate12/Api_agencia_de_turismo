@@ -1,5 +1,10 @@
 // meus imports
 const Sequelize = require('sequelize');
+const {
+  hashSync,
+  compareSync,
+  genSaltSync
+} = require('bcryptjs');
 
 module.exports = (sequelize, DataTypes) => {
   
@@ -15,8 +20,34 @@ module.exports = (sequelize, DataTypes) => {
 
   }, {
     sequelize,
-    modelName: 'user'
+    modelName: 'user',
+    hooks: {
+
+      beforeCreate: (userInstance, options) => {
+
+        const salt = genSaltSync();
+        userInstance.password = hashSync(userInstance.password, salt);
+        
+      },
+      beforeUpdate: (userInstance, options) => {
+
+        if (userInstance.changed('password')){
+
+          const salt = genSaltSync();
+          userInstance.password = hashSync(userInstance.password, salt);
+
+        }
+
+      }
+
+    }
   });
+
+  User.prototype.isPassoword = (newPassword, encodedPassword) => {
+
+    return compareSync(newPassword, encodedPassword);
+
+  };
 
   return User;
 
