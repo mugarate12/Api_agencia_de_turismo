@@ -9,7 +9,8 @@ const db = require('../models/index');
 const {
   normalizePort,
   onListening,
-  onError
+  onError,
+  handleError
 } = require('./utils/utils');
 
 // criando server e utilizando normalizePort
@@ -17,7 +18,7 @@ let server = http.createServer(app);
 const port = normalizePort(process.env.PORT || 3000);
 
 // sincronização com o banco
-db.sequelize.sync({force: true})
+db.sequelize.sync()
   .then(() => {
 
     // subindo o servidor
@@ -27,8 +28,4 @@ db.sequelize.sync({force: true})
 
 
   })
-  .catch((error) => {
-
-    console.log(`erro de conexão com o banco: ${error.message}`);
-
-  });
+  .catch((error) => handleError(error));

@@ -54,10 +54,26 @@ const onListening = (server) => {
 
 }
 
+const throwError = (condition, message) => {
+  
+  if(condition) throw new Error(message);
+
+}
+
+const handleError = (error) => {
+  
+  let message = `${error.name} : ${error.message}`;
+
+  throw new Error(message);
+
+}
+
 module.exports = {
 
   normalizePort,
   onListening,
-  onError
+  onError,
+  throwError,
+  handleError
 
 };

@@ -1,4 +1,8 @@
 // meus imports
+const {
+  handleError,
+  throwError
+} = require('../../../utils/utils');
 
 const userResolvers = {
   User: {},
@@ -14,16 +18,12 @@ const userResolvers = {
         .findByPk(id)
         .then((userInstance) => {
 
-          if (!userInstance) throw new Error(`user not found!`);
+          throwError(!userInstance, `user not found!`);
 
           return userInstance;
 
         })
-        .catch((error) => {
-
-          throw new Error(`${error.name} : ${error.message}`);
-
-        })
+        .catch((error) => handleError(error));
 
     }
 
@@ -41,7 +41,7 @@ const userResolvers = {
           .create(input, {
 
             transaction: Transaction
-          
+
           })
           .then((userInstance) => {
 
@@ -50,11 +50,12 @@ const userResolvers = {
           })
           .catch((userInstance) => {
 
-            if(userInstance) throw new Error(`user already exists`);
+            throwError(userInstance, 'user already exists');
 
           })
 
       })
+      .catch((error) => handleError(error));
 
     }
 
