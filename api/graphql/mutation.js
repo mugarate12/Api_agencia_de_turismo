@@ -1,12 +1,12 @@
 // import das mutations
-const { userMutations } = require('./resources/user/user.schema');
+const { employeeMutations } = require('./resources/employee/employee.schema');
 
 // definição
 const Mutation = `
 
   type Mutation {
 
-    ${userMutations}
+    ${employeeMutations}
 
   }
 

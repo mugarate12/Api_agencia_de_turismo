@@ -1,8 +1,8 @@
 // import dos types
-const { userTypes } = require('./resources/user/user.schema');
+const { employeeTypes } = require('./resources/employee/employee.schema');
 
 
 module.exports = [
   // meus types ficam aqui dentro
-  userTypes
+  employeeTypes
 ];

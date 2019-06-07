@@ -2,12 +2,12 @@
 const { merge } = require('lodash');
 
 // meus resolvers
-const userResolver = require('./resources/user/user.resolver');
+const employeeResolvers = require('./resources/employee/employee.resolver');
 
 // junção de todos os resolvers
 const resolvers = merge(
 
-  userResolver
+  employeeResolvers
 
 );
 

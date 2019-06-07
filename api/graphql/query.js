@@ -1,12 +1,12 @@
 // import das queries
-const { userQueries } = require('./resources/user/user.schema');
+const { employeeQueries } = require('./resources/employee/employee.schema');
 
 // definição
 const Query = `
 
   type Query {
 
-    ${userQueries}
+    ${employeeQueries}
 
   }
 
