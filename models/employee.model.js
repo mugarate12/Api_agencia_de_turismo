@@ -1,10 +1,11 @@
-// meus imports
+// imports
 const Sequelize = require('sequelize');
 const {
   hashSync,
   compareSync,
   genSaltSync
 } = require('bcryptjs');
+// meus imports
 
 module.exports = (sequelize, DataTypes) => {
   
@@ -17,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     name: { type: DataTypes.STRING, allowNull: false },
     username: { type: DataTypes.STRING, allowNull: false, unique: true },
     email: { type: DataTypes.STRING, allowNull: false, unique: true, validate: { isEmail: true }},
-    phoneNumber: { type: DataTypes.STRING, allowNull: false },
+    phoneNumber: { type: DataTypes.INTEGER, allowNull: false, validate: { isNumeric: true } },
+    CPF: { type: DataTypes.INTEGER, allowNull: false, validate: { isNumeric: true } },
     password: { type: DataTypes.STRING, allowNull: false, validate: { notEmpty: true } },
 
   }, {
@@ -50,6 +52,23 @@ module.exports = (sequelize, DataTypes) => {
     return compareSync(actualPassword, encodedPassword);
 
   };
+
+  Employee.associate = (models) => {
+    
+    Employee.belongsTo(models.admin, {
+
+      foreignKey: {
+
+        allowNull: false,
+        field: 'agency',
+        name: 'agency'
+
+      }
+
+    });
+
+  }
+  
 
   return Employee;
 

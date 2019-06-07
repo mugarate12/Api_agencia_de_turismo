@@ -1,4 +1,4 @@
-// definição dos tipos, e inputs
+// definição dos tipos e inputs
 const employeeTypes = `
 
   type Employee {
@@ -7,7 +7,9 @@ const employeeTypes = `
     name: String!
     username: String!,
     email: String!,
-    phoneNumber: String!, 
+    phoneNumber: Int!,
+    CPF: Int!,
+    agency: String!,
     createdAt: String!,
     updatedAt: String!
 
@@ -18,7 +20,8 @@ const employeeTypes = `
     name: String!
     username: String!,
     email: String!,
-    phoneNumber: String!
+    phoneNumber: Int!,
+    CPF: Int!
     password: String!
 
   }
