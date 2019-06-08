@@ -10,7 +10,7 @@ const createToken = (idUserOrAdmin, isAdmin) => {
     {
       
       sub: idUserOrAdmin,
-      iat: isAdmin
+      adm: isAdmin
 
     } :
     {
@@ -26,3 +26,5 @@ const createToken = (idUserOrAdmin, isAdmin) => {
   };
 
 }
+
+module.exports = createToken;

@@ -8,7 +8,7 @@ const employeeTypes = `
     username: String!,
     email: String!,
     phoneNumber: String!,
-    CPF: Int!,
+    CPF: String!,
     agency: String!,
     createdAt: String!,
     updatedAt: String!
@@ -20,14 +20,16 @@ const employeeTypes = `
     name: String!
     username: String!,
     email: String!,
-    phoneNumber: Int!,
-    CPF: Int!
-    password: String!
+    phoneNumber: String!,
+    CPF: String!,
+    agency: String!
+    password: String!,
 
   }
 
   input updateEmployeePasswordInput {
 
+    id: ID
     oldPassword: String!
     newPassword: String!
 
@@ -38,17 +40,32 @@ const employeeTypes = `
 // definição das queries
 const employeeQueries = `
 
-  # informe o token no header Authentication
-  currentEmployee(id: Int!): Employee
+  # informe o token de EMPLOYEE(FUNCIONARIO) no header Authentication
+  currentEmployee: Employee
+
+  # informe o token de ADMIN
+  employees(agency: String): [ Employee! ]!
+
+  # informe o token de ADMIN
+  employee(idEmployee: ID): Employee
+
 
 `;
 
 // definição das mutations
 const employeeMutations = `
 
-  createEmployee(input: createEmployeeInput!): Employee
-  #informe o token dele
+  # informe o token de ADMIN
+  createEmployee(input: createEmployeeInput!): Token
+  
+  # informe o token de EMPLOYEE(FUNCIONARIO) OU ADMIN
+  # se for o Admin, passe o ID nos parametros
+  # se for o employee(FUNCIONARIO) não precisa, basta passar o velho e novo password
   updateEmployeePassword(input: updateEmployeePasswordInput): Boolean!
+
+  # informe o token de ADMIN e o id do funcionario que quer deletar
+  deleteEmployee(idEmployee: ID!): Boolean!
+
 
 `;
 

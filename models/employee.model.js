@@ -18,9 +18,10 @@ module.exports = (sequelize, DataTypes) => {
     name: { type: DataTypes.STRING, allowNull: false },
     username: { type: DataTypes.STRING, allowNull: false, unique: true },
     email: { type: DataTypes.STRING, allowNull: false, unique: true, validate: { isEmail: true }},
-    phoneNumber: { type: DataTypes.STRING, allowNull: false, validate: { isNumeric: true } },
-    CPF: { type: DataTypes.INTEGER, allowNull: false, validate: { isNumeric: true } },
+    phoneNumber: { type: DataTypes.TEXT, allowNull: false, validate: { isNumeric: true } },
+    CPF: { type: DataTypes.TEXT, allowNull: false, validate: { isNumeric: true } },
     password: { type: DataTypes.STRING, allowNull: false, validate: { notEmpty: true } },
+    agency: { type: DataTypes.STRING, allowNull: false }
 
   }, {
     sequelize,
@@ -53,21 +54,21 @@ module.exports = (sequelize, DataTypes) => {
 
   };
 
-  Employee.associate = (models) => {
+  // Employee.associate = (models) => {
     
-    Employee.belongsTo(models.admin, {
+  //   Employee.belongsTo(models.admin, {
 
-      foreignKey: {
+  //     foreignKey: {
 
-        allowNull: false,
-        field: 'agency',
-        name: 'agency'
+  //       allowNull: false,
+  //       field: 'agency',
+  //       name: 'agency'
 
-      }
+  //     }
 
-    });
+  //   });
 
-  }
+  // }
   
 
   return Employee;

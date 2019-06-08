@@ -3,6 +3,8 @@ const {
   handleError,
   throwError
 } = require('../../../utils/utils');
+const validateToken = require('./../../../../controllers/validate_token.controller');
+const createToken = require('./../../../utils/create_token');
 
 const employeeResolvers = {
   Employee: {},
@@ -10,20 +12,70 @@ const employeeResolvers = {
 
     currentEmployee: (parent, args, context, info) => {
 
-      let { id } = args;
-      id = parseInt(id);
+      validateToken(context);
+      throwError(context.authUser != undefined && context.authUser.isAdmin, 'employee invalid');
+
+      let { db } = context;
+      let id = context.authUser.id;
+
+      return db.employee
+        .findByPk(id)
+        .then(employeeInstance => {
+
+          throwError(!employeeInstance, 'employee not found');
+
+          return employeeInstance
+
+        })
+        .catch(error => handleError(error));
+
+    },
+    employees: (parent, args, context, info) => {
+
+      validateToken(context);
+      throwError(context.authUser != undefined && !context.authUser.isAdmin, 'access denied');
+
+      let { agency } = args;
+      let { db } = context;
+
+      if (agency != undefined) {
+
+        return db.employee
+          .findAll({
+
+            where: { agency: agency }
+
+          })
+          .catch(error => handleError(error));
+
+      } else {
+
+        return db.employee
+          .findAll()
+          .catch(error => handleError(error));
+
+      }
+
+    },
+    employee: (parent, args, context, info) => {
+
+      validateToken(context);
+      throwError(context.authUser != undefined && !context.authUser.isAdmin, 'access denied');
+
+      let { idEmployee }= args;
+      let id = parseInt(idEmployee);
       let { db } = context;
 
       return db.employee
         .findByPk(id)
-        .then((employeeInstance) => {
+        .then(employeeInstance => {
 
-          throwError(!employeeInstance, `employee not found!`);
+          throwError(!employeeInstance, 'employee not found');
 
-          return employeeInstance;
+          return employeeInstance
 
         })
-        .catch((error) => handleError(error));
+        .catch(error => handleError(error));
 
     }
 
@@ -32,10 +84,11 @@ const employeeResolvers = {
 
     createEmployee: (parent, args, context, info) => {
 
+      validateToken(context);
+      throwError((context.authUser != undefined && !context.authUser.isAdmin), 'access denied');
+
       let { input } = args;
       let { db } = context;
-
-      // tem que vir o token do Admin
 
       return db.sequelize.transaction((Transaction) => {
 
@@ -45,42 +98,46 @@ const employeeResolvers = {
             transaction: Transaction
 
           })
-          .then((employeeInstance) => {
+          .then(employeeInstance => {
 
-            return employeeInstance;
+            throwError(!employeeInstance, 'employee already exists');
 
-          })
-          .catch((employeeInstance) => {
-
-            throwError(employeeInstance, 'employee already exists');
+            return createToken(employeeInstance.id, false);
 
           })
+          .catch(error => handleError(error));
 
       })
-        .catch((error) => handleError(error));
+        .catch(error => handleError(error));
 
     },
     updateEmployeePassword: (parent, args, context, info) => {
 
+      validateToken(context);
+
       let { input } = args;
       let { db } = context;
 
-      // vindo do token
-      let authEmployee = 1;
+      console.log(input.id);
 
-      return db.sequelize.transaction((Transaction) => {
+      let id = (context.authUser != undefined && !context.authUser.isAdmin) ?
+        context.authUser.id :
+        input.id;
+
+      console.log(id);
+
+      return db.sequelize.transaction(Transaction => {
 
         return db.employee
-          .findByPk(authEmployee)
-          .then((employeeInstance) => {
+          .findByPk(id)
+          .then(employeeInstance => {
 
             throwError(!employeeInstance, 'employee not found');
 
             let message = 'password not valid';
-            throwError(!employeeInstance.isPassword(input.oldPassword, employeeInstance.get('password')), message);
+            throwError(!employeeInstance.isPassword(input.oldPassword, employeeInstance.password), message);
 
             input.password = input.newPassword;
-            // console.log(input);
 
             return employeeInstance
               .update(input, {
@@ -88,20 +145,56 @@ const employeeResolvers = {
                 transaction: Transaction
 
               })
-              .then((employeeInstanceUpdated) => {
+              .then(employeeInstanceUpdated => {
 
                 return !!employeeInstanceUpdated
 
-              })
+              });
 
-          })
+          });
 
       })
-        .catch((error) => handleError(error));
+        .catch(error => handleError(error));
+
+    },
+    deleteEmployee: (parent, args, context, info) => {
+
+      validateToken(context);
+      throwError(context.authUser != undefined && !context.authUser.isAdmin, 'access denied');
+
+      let { db } = context;
+      let { idEmployee } = args;
+      id = parseInt(idEmployee);
+
+      return db.sequelize.transaction(Transaction => {
+
+        return db.employee
+          .findByPk(id)
+          .then(employeeInstance => {
+
+            throwError(!employeeInstance, 'employee not found');
+
+            return employeeInstance.destroy({
+
+              transaction: Transaction
+
+            })
+              .then(employeeRemoved => {
+
+                return !!employeeRemoved
+
+              })
+            // .catch(error => handleError(error));
+
+          });
+
+      })
+        .catch(error => handleError(error));
 
     }
 
   }
+
 };
 
 module.exports = employeeResolvers;

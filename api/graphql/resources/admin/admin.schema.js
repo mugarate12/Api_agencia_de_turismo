@@ -8,7 +8,7 @@ const adminTypes = `
     username: String!,
     email: String!,
     phoneNumber: String!,
-    CPF: Int!,
+    CPF: String!,
     agency: String!,
     createdAt: String!,
     updatedAt: String!
@@ -20,9 +20,10 @@ const adminTypes = `
     name: String!,
     username: String!,
     email: String!,
-    phoneNumber: Int!,
-    CPF: Int!,
-    agency: String!
+    phoneNumber: String!,
+    CPF: String!,
+    agency: String!,
+    password: String!
 
   }
 
@@ -33,20 +34,43 @@ const adminTypes = `
 
   }
 
+  input updateAdminProfileInput {
+
+    name: String,
+    email: String,
+    phoneNumber: String,
+    CPF: String
+
+  }
+
+  input loginAdminInput { 
+
+    email: String!
+    password: String!
+
+  }
+
 `;
 
 const adminQueries = `
 
-  # terá que informar o token
+  # terá que informar o token de ADMIN
   currentAdmin: Admin
+
+  loginAdmin(input: loginAdminInput): Token
 
 `;
 
 const adminMutations = `
 
   # pensar se isso deve existir, né.
-  createAdmin(input: createAdminInput): Admin
+  createAdmin(input: createAdminInput): Token
+
+  # informe o token de ADMIN
   updateAdminPassword(input: updateAdminPasswordInput): Boolean!
+
+  # informe o token de ADMIN 
+  updateAdminProfile(input: updateAdminProfileInput): Boolean!
 
 `;
 
