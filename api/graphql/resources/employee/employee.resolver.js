@@ -5,6 +5,10 @@ const {
 } = require('../../../utils/utils');
 const validateToken = require('./../../../../controllers/validate_token.controller');
 const createToken = require('./../../../utils/create_token');
+const {
+  isAdmin,
+  isEmployee
+} = require('./../../../utils/identify_token');
 
 const employeeResolvers = {
   Employee: {},
@@ -13,7 +17,7 @@ const employeeResolvers = {
     currentEmployee: (parent, args, context, info) => {
 
       validateToken(context);
-      throwError(context.authUser != undefined && context.authUser.isAdmin, 'employee invalid');
+      throwError(isAdmin(context), 'employee invalid');
 
       let { db } = context;
       let id = context.authUser.id;
@@ -33,7 +37,7 @@ const employeeResolvers = {
     employees: (parent, args, context, info) => {
 
       validateToken(context);
-      throwError(context.authUser != undefined && !context.authUser.isAdmin, 'access denied');
+      throwError(isEmployee(context), 'access denied');
 
       let { agency } = args;
       let { db } = context;
@@ -60,9 +64,9 @@ const employeeResolvers = {
     employee: (parent, args, context, info) => {
 
       validateToken(context);
-      throwError(context.authUser != undefined && !context.authUser.isAdmin, 'access denied');
+      throwError(isEmployee(context), 'access denied');
 
-      let { idEmployee }= args;
+      let { idEmployee } = args;
       let id = parseInt(idEmployee);
       let { db } = context;
 
@@ -85,7 +89,7 @@ const employeeResolvers = {
     createEmployee: (parent, args, context, info) => {
 
       validateToken(context);
-      throwError((context.authUser != undefined && !context.authUser.isAdmin), 'access denied');
+      throwError(isEmployee(context), 'access denied');
 
       let { input } = args;
       let { db } = context;
@@ -120,7 +124,7 @@ const employeeResolvers = {
 
       console.log(input.id);
 
-      let id = (context.authUser != undefined && !context.authUser.isAdmin) ?
+      let id = isEmployee(context) ?
         context.authUser.id :
         input.id;
 
@@ -160,7 +164,7 @@ const employeeResolvers = {
     deleteEmployee: (parent, args, context, info) => {
 
       validateToken(context);
-      throwError(context.authUser != undefined && !context.authUser.isAdmin, 'access denied');
+      throwError(isEmployee(context), 'access denied');
 
       let { db } = context;
       let { idEmployee } = args;

@@ -7,6 +7,10 @@ const {
 } = require('./../../../utils/utils');
 const createToken = require('../../../utils/create_token');
 const validateToken = require('./../../../../controllers/validate_token.controller');
+const {
+  isAdmin,
+  isEmployee
+} = require('./../../../utils/identify_token');
 
 const adminResolvers = {
 
@@ -17,18 +21,18 @@ const adminResolvers = {
 
       // console.log(context.authUser);
       validateToken(context);
-      throwError( context.authUser != undefined && !context.authUser.isAdmin, 'access denied');
+      throwError(isEmployee(context), 'access denied');
 
       let { db } = context;
 
       let id = context.authUser.id;
-      
+
       return db.admin
         .findByPk(id)
         .then((adminInstance) => {
 
           throwError(!adminInstance, 'admin not found');
-          
+
           return adminInstance;
 
         })
@@ -73,7 +77,7 @@ const adminResolvers = {
           .create(input, {
 
             transaction: Transaction
-            
+
           })
           .then((adminInstance) => {
 
@@ -90,13 +94,13 @@ const adminResolvers = {
           });
 
       })
-      .catch(error => handleError(error));
+        .catch(error => handleError(error));
 
     },
     updateAdminPassword: (parent, args, context, info) => {
 
       validateToken(context);
-      throwError( context.authUser != undefined && !context.authUser.isAdmin, 'access denied');
+      throwError(isEmployee(context), 'access denied');
 
       let { input } = args;
       let { db } = context;
@@ -104,7 +108,7 @@ const adminResolvers = {
       let id = context.authUser.id;
 
       return db.sequelize.transaction((Transaction) => {
-2
+        2
         return db.admin
           .findByPk(id)
           .then((adminInstance) => {
@@ -137,7 +141,7 @@ const adminResolvers = {
     updateAdminProfile: (parent, args, context, info) => {
 
       validateToken(context);
-      throwError((context.authUser != undefined && !context.authUser.isAdmin), 'access denied');
+      throwError(isEmployee(context), 'access denied');
 
       let { input } = args;
       let { db } = context;
@@ -153,7 +157,7 @@ const adminResolvers = {
 
             return adminInstance
               .update(input, {
-                
+
                 transaction: Transaction
 
               })
@@ -162,7 +166,7 @@ const adminResolvers = {
                 return !!adminInstanceUpdated
 
               });
-            
+
           });
 
       });

@@ -24,14 +24,13 @@ const busTypes = `
 
   input updateBusInput {
 
-    origin: String!,
-    destination: String!,
-    ticketValue: String!,
-    numberOfArchairs: Int!,
-    date: String!
+    origin: String,
+    destination: String,
+    ticketValue: String,
+    numberOfArchairs: Int,
+    date: String
     
   }
-
 
 `;
 
@@ -51,7 +50,7 @@ const busMutations = `
   createBus(input: createBusInput!): Bus
 
   # informe o token de Admin
-  updateBus(input: updateBusInput!): Boolean!
+  updateBus(id: ID!, input: updateBusInput!): Boolean!
 
   # informe o token de Admin e o id do onibus que quer excluir
   deleteBus(id: ID!): Boolean!
