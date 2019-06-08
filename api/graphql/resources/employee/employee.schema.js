@@ -44,6 +44,7 @@ const employeeQueries = `
   currentEmployee: Employee
 
   # informe o token de ADMIN
+  # lista de todos os funcionarios, e pode, CASO QUEIRA, filtrar pro agencia
   employees(agency: String): [ Employee! ]!
 
   # informe o token de ADMIN
