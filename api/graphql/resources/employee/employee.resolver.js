@@ -35,6 +35,8 @@ const employeeResolvers = {
       let { input } = args;
       let { db } = context;
 
+      // tem que vir o token do Admin
+
       return db.sequelize.transaction((Transaction) => {
 
         return db.employee

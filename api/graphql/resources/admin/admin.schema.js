@@ -7,7 +7,7 @@ const adminTypes = `
     name: String!,
     username: String!,
     email: String!,
-    phoneNumber: Int!,
+    phoneNumber: String!,
     CPF: Int!,
     agency: String!,
     createdAt: String!,
