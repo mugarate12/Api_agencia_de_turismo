@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   Employee.init({
     // definição dos campos
     id: { type: DataTypes.INTEGER, allowNull: false, primaryKey: true, autoIncrement: true },
-    name: { type: DataTypes.STRING, allowNull: false },
+    name: { type: DataTypes.TEXT, allowNull: false },
     username: { type: DataTypes.STRING, allowNull: false, unique: true },
     email: { type: DataTypes.STRING, allowNull: false, unique: true, validate: { isEmail: true }},
     phoneNumber: { type: DataTypes.TEXT, allowNull: false, validate: { isNumeric: true } },

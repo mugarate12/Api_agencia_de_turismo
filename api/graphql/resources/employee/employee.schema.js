@@ -59,9 +59,9 @@ const employeeMutations = `
   # informe o token de ADMIN
   createEmployee(input: createEmployeeInput!): Token
   
-  # informe o token de EMPLOYEE(FUNCIONARIO) OU ADMIN
-  # se for o Admin, passe o ID nos parametros
-  # se for o employee(FUNCIONARIO) não precisa, basta passar o velho e novo password
+  # 1 - informe o token de EMPLOYEE(FUNCIONARIO) OU ADMIN;  
+  # 2 - se for o Admin, passe o ID nos parametros;  
+  # 3 - se for o employee(FUNCIONARIO) não precisa, basta passar o velho e novo password
   updateEmployeePassword(input: updateEmployeePasswordInput): Boolean!
 
   # informe o token de ADMIN e o id do funcionario que quer deletar
